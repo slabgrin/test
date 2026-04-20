@@ -505,4 +505,128 @@
             <p class="desc">
               Quarkdown extends Markdown into a toolchain for ideas, presentations, articles, and books, blending composition with structured data and layouts.
             </p>
-         
+                     <p class="desc">
+              Quarkdown extends Markdown into a toolchain for ideas, presentations, articles, and books, blending composition with structured data and layouts.
+            </p>
+          </div>
+          <div class="repo-right">
+            <div class="stars">
+              4,392☆
+            </div>
+            <div class="language">
+              Language: TypeScript
+            </div>
+            <div class="usebox">
+              <p>
+                <strong>How to use this:</strong> turn Quarkdown into your “single source of truth” for strategies, experiments, and system design notes.
+              </p>
+              <p>
+                You can keep trading playbooks, research logs, and architecture docs in one markdown‑native format, then generate polished reports, notebooks, or briefings for yourself or collaborators with consistent typography.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TODO: PAGES 8–13 (REPOS 6–11) GO HERE -->
+    <!-- PAGE 14: BACK COVER -->
+    <div class="page cover">
+      <h1 class="cover-title">
+        FIN.
+      </h1>
+      <p class="tagline">
+        You’ve reached the back cover. Arrow keys, scroll, or dots to revisit any spread.
+      </p>
+    </div>
+
+  </div> <!-- end .magazine -->
+
+  <script>
+    (function () {
+      const mag = document.getElementById("mag");
+      const dots = Array.from(document.querySelectorAll(".dot"));
+      const totalPages = dots.length;
+      let currentPage = 0;
+      let isAnimating = false;
+
+      function goToPage(index) {
+        if (index < 0 || index >= totalPages) return;
+        if (isAnimating) return;
+        isAnimating = true;
+
+        currentPage = index;
+        const offset = -index * 100;
+        mag.style.transform = "translateX(" + offset + "vw)";
+
+        dots.forEach((d, i) => {
+          d.classList.toggle("active", i === currentPage);
+        });
+
+        setTimeout(() => {
+          isAnimating = false;
+        }, 350);
+      }
+
+      // Dot navigation
+      dots.forEach(dot => {
+        dot.addEventListener("click", () => {
+          const page = parseInt(dot.getAttribute("data-page"), 10);
+          goToPage(page);
+        });
+      });
+
+      // Keyboard navigation
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowRight") {
+          e.preventDefault();
+          goToPage(currentPage + 1);
+        } else if (e.key === "ArrowLeft") {
+          e.preventDefault();
+          goToPage(currentPage - 1);
+        }
+      });
+
+      // Wheel → page navigation (vertical wheel)
+      window.addEventListener(
+        "wheel",
+        (e) => {
+          if (Math.abs(e.deltaY) < 10) return;
+          if (isAnimating) return;
+
+          if (e.deltaY > 0) {
+            goToPage(currentPage + 1);
+          } else if (e.deltaY < 0) {
+            goToPage(currentPage - 1);
+          }
+        },
+        { passive: true }
+      );
+
+      // Basic swipe
+      let startX = null;
+      window.addEventListener("touchstart", (e) => {
+        if (e.touches.length === 1) {
+          startX = e.touches[0].clientX;
+        }
+      });
+
+      window.addEventListener("touchend", (e) => {
+        if (startX == null) return;
+        const endX = e.changedTouches[0].clientX;
+        const dx = endX - startX;
+        const threshold = 40;
+
+        if (Math.abs(dx) > threshold) {
+          if (dx < 0) {
+            goToPage(currentPage + 1);
+          } else {
+            goToPage(currentPage - 1);
+          }
+        }
+        startX = null;
+      });
+    })();
+  </script>
+</body>
+</html>
